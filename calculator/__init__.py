@@ -1,27 +1,30 @@
-# calculator.py
-from calculator.calculation import Calculation
-from calculator.operations import add, subtract, multiply, divide
+from calculator.calculations import Calculations  
+from calculator.operations import add, subtract, multiply, divide  
+from calculator.calculation import Calculation  
+from decimal import Decimal  
+from typing import Callable  
 
 
 class Calculator:
     @staticmethod
-    def add(a: float, b: float) -> float:
-        """Add two numbers."""
-        return a + b
+    def _perform_operation(a: Decimal, b: Decimal, operation: Callable[[Decimal, Decimal], Decimal]) -> Decimal:
+        
+        calculation = Calculation.create(a, b, operation)
+        Calculations.add_calculation(calculation)
+        return calculation.perform()
 
     @staticmethod
-    def subtract(a: float, b: float) -> float:
-        """Subtract two numbers."""
-        return a - b
+    def add(a: Decimal, b: Decimal) -> Decimal:
+        return Calculator._perform_operation(a, b, add)
 
     @staticmethod
-    def multiply(a: float, b: float) -> float:
-        """Multiply two numbers."""
-        return a * b
+    def subtract(a: Decimal, b: Decimal) -> Decimal:
+        return Calculator._perform_operation(a, b, subtract)
 
     @staticmethod
-    def divide(a: float, b: float) -> float:
-        """Divide two numbers, raises exception if dividing by zero."""
-        if b == 0:
-            raise ValueError("Cannot divide by zero")
-        return a / b
+    def multiply(a: Decimal, b: Decimal) -> Decimal:
+        return Calculator._perform_operation(a, b, multiply)
+
+    @staticmethod
+    def divide(a: Decimal, b: Decimal) -> Decimal:
+        return Calculator._perform_operation(a, b, divide)
